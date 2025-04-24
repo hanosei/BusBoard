@@ -2,6 +2,21 @@ import fetch from "node-fetch";
 import { config } from "dotenv";
 config();
 
+const postUrl = "https://api.postcodes.io/postcodes/nw51tl";
+
+async function getLongLat() {
+  const fetchLocation = await fetch(postUrl);
+  const locationData = await fetchLocation.json();
+  const longLat = []
+  await longLat.push(locationData.result.longitude);
+  await longLat.push (locationData.result.latitude);
+    return (longLat)
+  
+}
+
+console.log(await getLongLat());
+
+/*
 const API_KEY = process.env.API_KEY;
 const STOP_CODE = "490008660N";
 const url = `https://api.tfl.gov.uk/StopPoint/${STOP_CODE}/Arrivals?app_key=${API_KEY}`;
@@ -22,8 +37,9 @@ for (let i = 0; i < 5; i++) {
   console.log("Number " + sortedBusArrivals[i].lineName);
   console.log("Towards " + sortedBusArrivals[i].towards);
   console.log(
-    Math.floor(sortedBusArrivals[i].timeToStation / 60) + "mins" + "\n"
+    Math.floor(sortedBusArrivals[i].timeToStation / 60) + " mins" + "\n"
   );
 }
 
 //console.log(sortedBusArrivals);
+*/
