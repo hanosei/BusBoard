@@ -13,11 +13,11 @@ async function getLongLat() {
   return longLat;
 }
 
-locationArray = await getLongLat();
+const locationArray = await getLongLat();
 
 const API_KEY = process.env.API_KEY;
 const STOP_CODE = "490008660N";
-const url = `https://api.tfl.gov.uk/StopPoint/?lat=${longLat[1]}&lon=${longLat[0]}%20&stopTypes=NaptanPublicBusCoachTram%20&radius=500&modes=bus`;
+const url = `https://api.tfl.gov.uk/StopPoint/?lat=${locationArray[1]}&lon=${locationArray[0]}%20&stopTypes=NaptanPublicBusCoachTram%20&radius=500&modes=bus`;
 //let sortedBusArrivals = {}
 
 async function getBusArrivals() {
