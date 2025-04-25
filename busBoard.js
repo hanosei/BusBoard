@@ -3,16 +3,16 @@ import { config } from "dotenv";
 config();
 
 const API_KEY = "d40a5d1e4ea34f13b25595a3ba3ee6d4";
+let postcode = "nw51tl";
 
-
-async function getCoordinates() {
-  const fetchLocation = await fetch("https://api.postcodes.io/postcodes/nw51tl");
+async function getCoordinates(postcode) {
+  const fetchLocation = await fetch(`https://api.postcodes.io/postcodes/${postcode}`);
   const locationData = await fetchLocation.json();
   const longLat = {longitude:locationData.result.longitude, latitude:locationData.result.latitude};
   return longLat;
 }
 
-const coordinates = await getCoordinates();
+const coordinates = await getCoordinates(postcode);
 
 async function getNearestBusStops() {
   const fetchBus = await fetch(`https://api.tfl.gov.uk/StopPoint/?lat=${coordinates.latitude}&lon=${coordinates.longitude}%20&stopTypes=NaptanPublicBusCoachTram%20&radius=500&modes=bus`);
