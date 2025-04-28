@@ -3,19 +3,26 @@ import { config } from "dotenv";
 config();
 
 const API_KEY = "d40a5d1e4ea34f13b25595a3ba3ee6d4";
-let postcode = "nw51tl";
+let postcode = "nw5 1tl";
 
 async function getCoordinates(postcode) {
-  const fetchLocation = await fetch(`https://api.postcodes.io/postcodes/${postcode}`);
+  try { const fetchLocation = await fetch(`https://api.postcodes.io/postcodes/${postcode}`);
   const locationData = await fetchLocation.json();
   const longLat = {longitude:locationData.result.longitude, latitude:locationData.result.latitude};
-  return longLat;
+  return longLat;}
+
+  catch (error)
+{ console.log("Please Use a valid London Postcode");
+  process.exit(1);
+}
 }
 
-const coordinates = await getCoordinates(postcode);
+  const coordinates = await getCoordinates(postcode);
+
+
 
 async function getNearestBusStops() {
-  const fetchBus = await fetch(`https://api.tfl.gov.uk/StopPoint/?lat=${coordinates.latitude}&lon=${coordinates.longitude}%20&stopTypes=NaptanPublicBusCoachTram%20&radius=80&modes=bus`);
+  const fetchBus = await fetch(`https://api.tfl.gov.uk/StopPoint/?lat=${coordinates.latitude}&lon=${coordinates.longitude}%20&stopTypes=NaptanPublicBusCoachTram%20&radius=500&modes=bus`);
   const busData = await fetchBus.json();
   console.log("checking bus stops...");
     let nearestBusStops = {};
