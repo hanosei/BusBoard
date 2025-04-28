@@ -73,5 +73,15 @@ getBusArrivals(sortedBusArrivals);
 getBusArrivals(keys,values);
  
 
-
- 
+async function directionsToNearestBusStop (postcode,values,keys) {
+  //console.log(values[0]);
+  const fetchDirection = await fetch(`https://api.tfl.gov.uk/Journey/JourneyResults/${postcode}/to/${values[0]}`);
+  const Directions = await fetchDirection.json();
+  const Duration = Directions.journeys[0].duration;
+  const instructions = Directions.journeys[0].legs[0].instruction.steps;
+  console.log(`Directions to ${keys[0]} bus stop`);
+  for (let i=0; i<instructions.length; i++){
+    console.log(i+1 + ". " + instructions[i].descriptionHeading + " " + instructions[i].description + "\n");
+  }
+}
+ directionsToNearestBusStop(postcode,values,keys);
