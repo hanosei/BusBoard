@@ -15,15 +15,22 @@ async function getCoordinates(postcode) {
 const coordinates = await getCoordinates(postcode);
 
 async function getNearestBusStops() {
-  const fetchBus = await fetch(`https://api.tfl.gov.uk/StopPoint/?lat=${coordinates.latitude}&lon=${coordinates.longitude}%20&stopTypes=NaptanPublicBusCoachTram%20&radius=500&modes=bus`);
+  const fetchBus = await fetch(`https://api.tfl.gov.uk/StopPoint/?lat=${coordinates.latitude}&lon=${coordinates.longitude}%20&stopTypes=NaptanPublicBusCoachTram%20&radius=80&modes=bus`);
   const busData = await fetchBus.json();
-  let nearestBusStops = {};
-  for (let i = 0; i < 2; i++) {
-    nearestBusStops[busData.stopPoints[i].commonName] = busData.stopPoints[i].id;
-  } 
-  
-  return nearestBusStops;
-}
+  console.log("checking bus stops...");
+    let nearestBusStops = {};
+    const nearestTwoBusStops = Math.min(busData.stopPoints.length, 2)
+      if (busData.stopPoints.length !== 0) {
+        for (let i = 0; i < nearestTwoBusStops; i++) {
+        nearestBusStops[busData.stopPoints[i].commonName] = busData.stopPoints[i].id;
+        }
+      }
+      else {
+        console.log("No bus stops nearby");
+      }
+    
+    return nearestBusStops;
+  }
 
 async function getBusArrivals(keys,values) {
   for (let i=0; i<keys.length;i++) {
@@ -39,7 +46,9 @@ async function getBusArrivals(keys,values) {
 
 function get5Buses(sortedBusArrivals) {
   
-  for (let i = 0; i < 5; i++) {
+  const numberOfBuses = Math.min(sortedBusArrivals.length, 5)
+
+  for (let i = 0; i < numberOfBuses; i++) {
     console.log("Number " + sortedBusArrivals[i].lineName);
     console.log("Towards " + sortedBusArrivals[i].towards);
     console.log(
