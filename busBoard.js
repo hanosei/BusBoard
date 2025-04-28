@@ -6,15 +6,17 @@ const API_KEY = "d40a5d1e4ea34f13b25595a3ba3ee6d4";
 let postcode = "nw51tl"
 
 async function getCoordinates(postcode) {
-  try { const fetchLocation = await fetch(`https://api.postcodes.io/postcodes/${postcode}`);
-  const locationData = await fetchLocation.json();
-  const longLat = {longitude:locationData.result.longitude, latitude:locationData.result.latitude};
-  return longLat;}
+  try { 
+    const fetchLocation = await fetch(`https://api.postcodes.io/postcodes/${postcode}`);
+    const locationData = await fetchLocation.json();
+    const longLat = {longitude:locationData.result.longitude, latitude:locationData.result.latitude};
+    return longLat;
+  }
 
-  catch (error)
-{ console.log("Please Use a valid London Postcode");
-  process.exit(1);
-}
+  catch (error) { 
+    console.log("Please Use a valid London Postcode");
+    process.exit(1);
+  }
 }
 
   const coordinates = await getCoordinates(postcode);
@@ -47,7 +49,7 @@ async function getBusArrivals(keys,values) {
     (a, b) => a.timeToStation - b.timeToStation
   );
   console.log("At bus stop: " + keys[i] + "\n");
-  directionsToNearestBusStop(postcode,values[i],keys[i]);
+  await directionsToNearestBusStop(postcode,values[i],keys[i]);
   get5Buses(sortedBusArrivals);
   }
 }
