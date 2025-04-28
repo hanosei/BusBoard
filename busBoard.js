@@ -3,7 +3,7 @@ import { config } from "dotenv";
 config();
 
 const API_KEY = "d40a5d1e4ea34f13b25595a3ba3ee6d4";
-let postcode = "nw5 1tl";
+let postcode = "nw51tl"
 
 async function getCoordinates(postcode) {
   try { const fetchLocation = await fetch(`https://api.postcodes.io/postcodes/${postcode}`);
@@ -47,6 +47,7 @@ async function getBusArrivals(keys,values) {
     (a, b) => a.timeToStation - b.timeToStation
   );
   console.log("At bus stop: " + keys[i] + "\n");
+  directionsToNearestBusStop(postcode,values[i],keys[i]);
   get5Buses(sortedBusArrivals);
   }
 }
@@ -73,15 +74,19 @@ getBusArrivals(sortedBusArrivals);
 getBusArrivals(keys,values);
  
 
-async function directionsToNearestBusStop (postcode,values,keys) {
-  //console.log(values[0]);
-  const fetchDirection = await fetch(`https://api.tfl.gov.uk/Journey/JourneyResults/${postcode}/to/${values[0]}`);
+async function directionsToNearestBusStop (postcode,stopId,StopName) {
+  try {
+  const fetchDirection = await fetch(`https://api.tfl.gov.uk/Journey/JourneyResults/${postcode}/to/${stopId}`);
   const Directions = await fetchDirection.json();
   const Duration = Directions.journeys[0].duration;
   const instructions = Directions.journeys[0].legs[0].instruction.steps;
-  console.log(`Directions to ${keys[0]} bus stop`);
+  console.log(`Directions to ${StopName} bus stop (${Duration} minutes)`);
   for (let i=0; i<instructions.length; i++){
     console.log(i+1 + ". " + instructions[i].descriptionHeading + " " + instructions[i].description + "\n");
   }
 }
- directionsToNearestBusStop(postcode,values,keys);
+  catch (error)
+  { console.log("Please Use a valid London Postcode");
+    process.exit(1);
+  }
+}
